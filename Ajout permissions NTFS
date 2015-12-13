@@ -1,0 +1,20 @@
+ Get-Acl chemin-du-dossier | Format-List
+
+         $acl = Get-Acl cehmin-du-dossier
+
+        $acl.SetAccessRuleProtection($True, $False)
+        
+        
+
+       
+
+         $rule = New-Object System.Security.AccessControl.FileSystemAccessRule("Administrators","FullControl", "ContainerInherit, ObjectInherit", "None", "Allow")
+
+         $acl.AddAccessRule($rule)
+
+        
+        Set-Acl chemin-du-dossier $acl
+  Get-Acl C:\kefta  | Format-List
+  
+  #Permet à l'administrateur d'avoir le controle total sur un dossier , un utilisateur lambda  ne peut lire, executer et modifier
+  le dossier que si il connait le mot de passe administrateur.
