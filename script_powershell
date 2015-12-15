@@ -1,6 +1,9 @@
-
 $local=[ADSI]"WinNT://."
 $fichier="C:\testPowershell\listeCompte.txt"
+
+New-ADOrganizationalUnit -Name OU_Groupes_Globaux -Path "dc=GSB,dc=loc"
+New-ADOrganizationalUnit -Name OU_Direction -Path "ou=OU_Groupes_Globaux,dc=srvtest,dc=local"
+
 
 #Creation de l'utilisateur
 if (Test-Path $fichier){
@@ -31,6 +34,28 @@ else{
 }
 
 
+#Creation dossier personnel
+foreach ($Ligne in $colLigne)
+{
+$Nomdedossier=$nom
+$chemin="\\H:\DATA\Perso\$nom"
+New-Item -ItemType "directory" -name $nom -path $chemin # Nouvel objet de type « repertoire » avec nom variable et dossier variable selon le service.
+}
+
+#NTFS
+ Get-Acl $chemin | Format-List
+
+         $acl = Get-Acl $chemin
+
+        $acl.SetAccessRuleProtection($True, $False)
+
+         $rule = New-Object System.Security.AccessControl.FileSystemAccessRule("Administrators","FullControl", "ContainerInherit, ObjectInherit", "None", "Allow")
+
+         $acl.AddAccessRule($rule)
+
+
+        Set-Acl $chemin $acl
+  Get-Acl $chemin  | Format-List
 
 
 
